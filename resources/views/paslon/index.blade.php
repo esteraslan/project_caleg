@@ -89,7 +89,6 @@
 
                 <label class="col-sm-3 col-form-label">Choose File</label>
                 <div class="col-sm-9">
-                    <input type="hidden" id="id" class="form-control" required>
                     <input type="file" id="gambar" class="form-control" required>
                 </div>
             </div>
@@ -130,7 +129,7 @@
       $(document).ready(function(){
           list();
           upload();
-       });
+      });
 
       function list(){
         var table = $('#example1').DataTable({
@@ -370,6 +369,40 @@
               });
           }
       }
+
+      $(document).on("click", "#btn_delete", function () {
+        var id = $(this).data('id');
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              type: 'POST',
+              url: "{{route('paslon.destroy')}}",
+              data: {id: id, _token: '{{csrf_token()}}'},
+              dataType: 'json',
+              success: function(result) { 
+                if(result.success){
+                  SweetAlert.fire({
+                    icon: 'success', title: 'Success', text: result.msg, showConfirmButton: false, timer: 1500
+                  });
+                }else{
+                  SweetAlert.fire({
+                    icon: 'error', title: 'Error', text: result.msg, showConfirmButton: false, timer: 1500
+                  });
+                }
+                list();
+              }
+            });
+          }
+        })
+      });
    </script>
 @endpush
 

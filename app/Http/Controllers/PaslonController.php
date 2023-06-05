@@ -124,4 +124,25 @@ class PaslonController extends Controller
             }
         }
     }
+
+    public function destroy(Request $request)
+    {
+        $calon = Paslon::where('id', $request->id)->first();
+        $image_path = 'dist/img/paslon/'.$calon->gambar; 
+        if(File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        $query = Paslon::where('id', $request->id)->delete();
+        if($query){
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Delete success.'
+            ]);
+        }else{
+            return response()->json([
+                'success'   => false,
+                'msg'       => 'Delete failed.'
+            ]);
+        }
+    }
 }

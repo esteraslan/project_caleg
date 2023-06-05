@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/create', 'PaslonController@store')->name('paslon.store');
         Route::get('/edit', 'PaslonController@edit')->name('paslon.edit');
         Route::post('/update', 'PaslonController@update')->name('paslon.update');
+        Route::post('/delete', 'PaslonController@destroy')->name('paslon.destroy');
     });   
 
     Route::group(['prefix' => 'tps'], function() {
