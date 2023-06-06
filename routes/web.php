@@ -45,10 +45,22 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::group(['prefix' => 'tps'], function() {
         Route::get('/', 'TpsController@index')->name('tps.index');
+        Route::get('/list', 'TpsController@list')->name('tps.list');
+        Route::get('/getkec', 'TpsController@getkec')->name('tps.getkec');
+        Route::get('/getkel', 'TpsController@getkel')->name('tps.getkel');
+        Route::post('/create', 'TpsController@store')->name('tps.store');
+        Route::get('/edit', 'TpsController@edit')->name('tps.edit');
+        Route::post('/update', 'TpsController@update')->name('tps.update');
+        Route::post('/delete', 'TpsController@destroy')->name('tps.destroy');
     });  
     
     Route::group(['prefix' => 'relawan'], function() {
         Route::get('/', 'RelawanController@index')->name('relawan.index');
+        Route::get('/list', 'RelawanController@list')->name('relawan.list');
+        Route::post('/create', 'RelawanController@store')->name('relawan.store');
+        Route::get('/edit', 'RelawanController@edit')->name('relawan.edit');
+        Route::post('/update', 'RelawanController@update')->name('relawan.update');
+        Route::post('/delete', 'RelawanController@destroy')->name('relawan.destroy');
     }); 
     
     Route::group(['prefix' => 'pendukung'], function() {

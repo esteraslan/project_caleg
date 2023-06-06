@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tps', function (Blueprint $table) {
+        Schema::create('relawans', function (Blueprint $table) {
             $table->id();
+            $table->string('nik');
             $table->string('name');
-            $table->integer('id_kab');
-            $table->integer('id_kec');
-            $table->biginteger('id_kel');
-            $table->string('no_rt', 20)->nullable();
-            $table->string('no_rw', 20)->nullable();
-            $table->string('nm_kp')->nullable();
+            $table->integer('jenis_kelamin');
+            $table->string('tmp_lahir');
+            $table->date('tgl_lahir');
+            $table->string('organisasi');
+            $table->string('no_hp', 14);
             $table->integer('sts')->nullable();
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tps');
+        Schema::dropIfExists('relawans');
     }
 };

@@ -10,7 +10,7 @@ class PaslonController extends Controller
 {
     public function index()
     {
-        $title = 'Paslon';
+        $title = 'Calon';
         return view('paslon.index', compact('title'));
     }
 

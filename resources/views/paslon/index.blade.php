@@ -5,7 +5,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-6">
-        <h1 class="m-0">Data Paslon</h1>
+        <h1 class="m-0">Data Calon Legislatif</h1>
       </div>
       <div class="col-sm-6">
         
@@ -20,7 +20,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">List Data Paslon</h3>
+                  <h3 class="card-title">List Data Legislatif</h3>
                   <div class="card-tools">
                     <button class="btn btn-primary btn-sm" id="btn_add"><i class="fa fa-plus"></i> Add</button>
                   </div>
@@ -51,8 +51,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="title1">Tambah Data Paslon</h4>
-        <h4 class="modal-title" id="title2">Edit Data Paslon</h4>
+        <h4 class="modal-title" id="title1">Tambah Data Calon</h4>
+        <h4 class="modal-title" id="title2">Edit Data Calon</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -93,12 +93,8 @@
                 </div>
             </div>
           </div>
-          <div class="col-sm-4">
-            <div class="form-group row">
-              <div class="col-sm-12 text-center">
-                  <img id="imageView" src="{{ asset('dist/img/bg_upload.png'); }}" alt="your image" width="80%" height="200" class="img-thumbnail" />
-              </div>
-            </div>
+          <div class="col-sm-3">
+            <img id="imageView" src="{{ asset('dist/img/bg_upload.png'); }}" alt="your image" width="100%" class="img-thumbnail" />
           </div>
         </div>
       </div>

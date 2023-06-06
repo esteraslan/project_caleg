@@ -5,7 +5,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-6">
-        <h1 class="m-0">TPS</h1>
+        <h1 class="m-0">Data TPS</h1>
       </div>
       <div class="col-sm-6">
         
@@ -26,14 +26,16 @@
               </div>
             </div>
             <div class="card-body">
-              <table id="example1" class="table table-hover">
+              <table id="example1" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                      <th width="50">#</th>
+                      <th>#</th>
+                      <th>Kabupaten</th>
+                      <th>Kecamatan</th>
+                      <th>Desa</th>
                       <th>Nama TPS</th>
-                      <th>Alamat</th>
                       <th>Status</th>
-                      <th width="70">Action</th>
+                      <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,7 +49,7 @@
 </section>
 
 <div class="modal fade" id="myModal2">
-  <div class="modal-dialog ">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="title1">Tambah Data TPS</h4>
@@ -59,38 +61,50 @@
       <div class="modal-body">
         <div class="form-group row">
             <div class="col-12" id="alert"></div>
-            <label class="col-sm-3 col-form-label">Nama TPS:</label>
-            <div class="col-sm-9">
-                <input type="hidden" id="iddata" class="form-control" required>
-                <input type="text" id="nama" class="form-control form-control-sm" required>
-            </div>
-
-            <label class="col-sm-3 col-form-label">Provinsi :</label>
-            <div class="col-sm-9">
-              <select style="width: 100%;" id="prov" class="form-control form-control-sm select2" required>
-              </select>
-            </div>
-
-            <label class="col-sm-3 col-form-label">Kota/Kabupaten :</label>
-            <div class="col-sm-9">
+            <label class="col-sm-2 col-form-label">Kabupaten :</label>
+            <div class="col-sm-4">
               <select style="width: 100%;" id="kab" class="form-control form-control-sm select2" required>
+                <option value="" selected>- pilih -</option>
+                <option value="3215">Karawang</option>
+                <option value="3214">Purwakarta</option>
               </select>
             </div>
 
-            <label class="col-sm-3 col-form-label">Kecamatan :</label>
-            <div class="col-sm-9">
+            <label class="col-sm-2 col-form-label">Kecamatan :</label>
+            <div class="col-sm-4">
               <select style="width: 100%;" id="kec" class="form-control form-control-sm select2" required>
               </select>
             </div>
 
-            <label class="col-sm-3 col-form-label">Desa/Kelurahan :</label>
-            <div class="col-sm-9 mb-2">
+            <label class="col-sm-2 col-form-label">Kelurahan :</label>
+            <div class="col-sm-4 mb-2">
               <select style="width: 100%;" id="desa" class="form-control form-control-sm select2" required>
               </select>
             </div>
 
-            <label class="col-sm-3 col-form-label">Status</label>
-            <div class="col-sm-9">
+            <label class="col-sm-2 col-form-label">Dusun :</label>
+            <div class="col-sm-4 mb-2">
+              <input type="text" id="nm_kp" class="form-control form-control-sm" required>
+            </div>
+
+            <label class="col-sm-2 col-form-label">RT :</label>
+            <div class="col-sm-4 mb-2">
+              <input type="text" id="no_rt" class="form-control form-control-sm" required>
+            </div>
+
+            <label class="col-sm-2 col-form-label">RW :</label>
+            <div class="col-sm-4 mb-2">
+              <input type="text" id="no_rw" class="form-control form-control-sm" required>
+            </div>
+
+            <label class="col-sm-2 col-form-label">Nama TPS:</label>
+            <div class="col-sm-4">
+              <input type="hidden" id="id" class="form-control" required>
+              <input type="text" id="nama" class="form-control form-control-sm" required>
+            </div>
+
+            <label class="col-sm-2 col-form-label">Status :</label>
+            <div class="col-sm-4">
               <select style="width: 100%;" id="sts" class="form-control form-control-sm select2" required>
                 <option value="" selected>- pilih -</option>
                 <option value="1">Aktif</option>
@@ -138,7 +152,7 @@
                 destroy: true,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('paslon.list') }}"
+                    url: "{{ route('tps.list') }}"
                 },
                 columns: [{
                         data: null,
@@ -150,28 +164,29 @@
                         }
                     },
                     {
-                        data: 'gambar',
-                        name: 'gambar',
-                        render: function(data) {
-                          return '<img src="dist/img/paslon/'+data+'" width="50" height="60" class="img-thumbnail"/>';
-                        }
+                        data: 'kab',
+                        name: 'kab'
                     },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'kec',
+                        name: 'kec'
                     },
                     {
-                        data: 'partai',
-                        name: 'partai'
+                        data: 'desa',
+                        name: 'desa'
+                    },
+                    {
+                        data: 'nm_tps',
+                        name: 'nm_tps'
                     },
                     {
                         data: 'sts',
                         name: 'sts',
                         render: function(data) {
                           if(data == 1){
-                            return 'Calon Utama';
+                            return 'Aktif';
                           }else{
-                            return 'Calon Lawan';
+                            return 'Tidak Aktif';
                           }
                         }
                     },
@@ -208,6 +223,56 @@
           $("#title2").hide();
       });
 
+      $(document).on("change", "#kab", function () {
+          if(this.value != ''){
+            getKec();
+          }else{
+            getKec();
+            $("#kec").val('').trigger('change');
+          }
+      });
+
+      function getKec(){
+        var html = '';
+          $.ajax({
+            url: "{{route('tps.getkec')}}",
+            type: "GET",
+            data: {id: kab.value},
+            success: function (result) {
+              html += '<option value="" selected>-- Select --</option>';
+              $.each(result.data, function (key, value) {
+                  html += '<option value="'+value.code+'"> '+value.name+' </option>';
+              });
+              document.getElementById("kec").innerHTML = html;
+            }
+          });
+      }
+
+      $(document).on("change", "#kec", function () {
+          if(this.value != ''){
+            getKel();
+          }else{
+            getKel();
+            $("#desa").val('').trigger('change');
+          }
+      });
+
+      function getKel(){
+        var html = '';
+          $.ajax({
+            url: "{{route('tps.getkel')}}",
+            type: "GET",
+            data: {id: kec.value},
+            success: function (result) {
+              html += '<option value="" selected>-- Select --</option>';
+              $.each(result.data, function (key, value) {
+                  html += '<option value="'+value.code+'"> '+value.name+' </option>';
+              });
+              document.getElementById("desa").innerHTML = html;
+            }
+          });
+      }
+
       $(document).on("click", ".close", function () {
         clear();
       });
@@ -215,61 +280,46 @@
       function clear(){
           $("#id").val('');
           $("#nama").val('');
-          $("#partai").val('');
-          $("#no_urut").val('');
+          $("#kab").val('').trigger('change');
+          $("#kec").val('').trigger('change');
+          $("#desa").val('').trigger('change');
+          $("#no_rt").val('');
+          $("#no_rw").val('');
+          $("#nm_kp").val('');
           $("#sts").val('').trigger('change');
-          $("#gambar").val('');
-          imageView.src = "{{ asset('dist/img/bg_upload.png'); }}";
       }
 
       $(document).on("click", ".Save", function () {
-          $('#myModalLoading').modal({ backdrop: 'static', keyboard: false, show: true });
-          $('#myModal2').modal('hide');
-          var files = $('#gambar')[0].files;
-          if(files.length > 0){
-              var fd = new FormData();
-              // Append data 
-              fd.append('nama', nama.value);
-              fd.append('partai', partai.value);
-              fd.append('no_urut', no_urut.value);
-              fd.append('sts', sts.value);
-              fd.append('gambar', files[0]);
-              fd.append('_token', '{{csrf_token()}}');
-              // Hide alert 
-              $('#responseMsg').hide();
-              // AJAX request 
-              if(validasi()){
-                $.ajax({
-                    url: "{{route('paslon.store')}}",
-                    method: 'POST',
-                    data: fd,
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function(result){
-                        if(result.success){
-                            list();
-                            clear();
-                            $("#myModalLoading").modal('hide');
-                            SweetAlert.fire({
-                                icon: 'success', title: 'Success', text: result.msg, showConfirmButton: false, timer: 1500
-                            });
-                        }else{
-                            clear();
-                            $("#myModalLoading").modal('hide');
-                            SweetAlert.fire({
-                                icon: 'error', title: 'Error', text: result.msg, showConfirmButton: false, timer: 50000
-                            });
-                        }
-                    }
-                });
+        $("#alert").html('');
+        $("#alert").show();
+        if(validasi()){
+          $.ajax({
+              type: 'POST',
+              url: "{{route('tps.store')}}",
+              data: {
+                      nama: nama.value,
+                      kab: kab.value,
+                      kec: kec.value,
+                      desa: desa.value,
+                      nm_kp: nm_kp.value,
+                      no_rt: no_rt.value,
+                      no_rw: no_rw.value,
+                      sts: sts.value,
+                      _token: '{{csrf_token()}}'
+                  },
+              success: function(result) { 
+                  if(result.success){
+                      $("#alert").html('<div class="alert alert-success"><i class="fa fa-check"></i> '+result.msg+'</div>');
+                      list();
+                      clear();
+                      setTimeout(() => { $("#alert").hide(); }, 1500);
+                  }else{
+                      $("#alert").html('<div class="alert alert-danger"><i class="fa fa-warning"></i> '+result.msg+'</div>');
+                      setTimeout(() => { $("#alert").hide(); }, 1500);
+                  }
               }
-          }else{
-              $("#myModalLoading").modal('hide');
-              SweetAlert.fire({
-                  icon: 'error', title: 'Error', text: 'Silahkan pilih file.', showConfirmButton: false, timer: 5000
-              });
-          }
+          });
+        }
       });
 
       $(document).on("click", "#btn_edit", function () {
@@ -280,7 +330,7 @@
           var id = $(this).data('id');
           $.ajax({
               type: 'GET',
-              url: "{{route('paslon.edit')}}",
+              url: "{{route('tps.edit')}}",
               data: {
                       id: id,
                       _token: '{{csrf_token()}}'
@@ -288,12 +338,19 @@
               success: function(result) { 
                   if(result.success){
                       $('#myModal2').modal({ backdrop: 'static', keyboard: false, show: true });
-                      $("#iddata").val(result.id);
-                      $("#nama").val(result.nama);
-                      $("#partai").val(result.partai);
-                      $("#no_urut").val(result.no_urut);
+                      $("#id").val(result.id);
+                      $("#nama").val(result.name);
+                      $("#kab").val(result.id_kab).trigger('change');
+                      setTimeout(() => { 
+                        $("#kec").val(result.id_kec).trigger('change'); 
+                      }, 1500); 
+                      setTimeout(() => { 
+                        $("#desa").val(result.id_kel).trigger('change'); 
+                      }, 2500); 
+                      $("#nm_kp").val(result.nm_kp);
+                      $("#no_rt").val(result.no_rt);
+                      $("#no_rw").val(result.no_rw);
                       $("#sts").val(result.sts).trigger('change');
-                      imageView.src = '{{asset('dist/img/paslon')}}/'+result.gambar;
                   }else{
                       SweetAlert.fire({
                           icon: 'warning', title: 'Warning', text: result.msg, showConfirmButton: false, timer: 1500
@@ -304,55 +361,47 @@
       });
 
       $(document).on("click", ".Update", function () {
-          $('#myModalLoading').modal({ backdrop: 'static', keyboard: false, show: true });
-          $('#myModal2').modal('hide');
-          var files = $('#gambar')[0].files;
-          var fd = new FormData();
-          // Append data 
-          fd.append('id', iddata.value);
-          fd.append('nama', nama.value);
-          fd.append('partai', partai.value);
-          fd.append('no_urut', no_urut.value);
-          fd.append('sts', sts.value);
-          fd.append('gambar', files[0]);
-          fd.append('_token', '{{csrf_token()}}');
-          // Hide alert 
-          $('#responseMsg').hide();
-          // AJAX request 
-          if(validasi()){
-            $.ajax({
-                url: "{{route('paslon.update')}}",
-                method: 'POST',
-                data: fd,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                success: function(result){
-                    if(result.success){
-                        list();
-                        clear();
-                        $("#myModalLoading").modal('hide');
-                        SweetAlert.fire({
-                            icon: 'success', title: 'Success', text: result.msg, showConfirmButton: false, timer: 1500
-                        });
-                    }else{
-                        clear();
-                        $("#myModalLoading").modal('hide');
-                        SweetAlert.fire({
-                            icon: 'error', title: 'Error', text: result.msg, showConfirmButton: false, timer: 50000
-                        });
-                    }
-                }
-            });
-          }
+        if(validasi()){
+          $.ajax({
+              type: 'POST',
+              url: "{{route('tps.update')}}",
+              data: {
+                      id: id.value,
+                      nama: nama.value,
+                      kab: kab.value,
+                      kec: kec.value,
+                      desa: desa.value,
+                      nm_kp: nm_kp.value,
+                      no_rt: no_rt.value,
+                      no_rw: no_rw.value,
+                      sts: sts.value,
+                      _token: '{{csrf_token()}}'
+                  },
+              success: function(result) { 
+                  if(result.success){
+                    list();
+                    $('#myModal2').modal('hide');
+                    SweetAlert.fire({
+                        icon: 'success', title: 'Success', text: result.msg, showConfirmButton: false, timer: 1500
+                    });
+                  }else{
+                    $('#myModal2').modal('hide');
+                    SweetAlert.fire({
+                        icon: 'error', title: 'Error', text: result.msg, showConfirmButton: false, timer: 1500
+                    });
+                  }
+              }
+          });
+        }
       });
 
       function validasi(){
-          if(nama.value != '' && partai.value != '' && no_urut.value != ''){
+          if(nama.value != '' && kab.value != '' && kec.value != ''&& desa.value != ''
+          && nm_kp.value != ''&& no_rt.value != ''&& no_rw.value != ''&& sts.value != ''){
               return true;
           }else{
               SweetAlert.fire({
-                  icon: 'error', title: 'Error', text: 'Kolom Nama, Partai & No Urut tidak boleh kosong.', showConfirmButton: false, timer: 1500
+                  icon: 'error', title: 'Error', text: 'Semua kolom tidak boleh kosong.', showConfirmButton: false, timer: 1500
               });
           }
       }
@@ -371,7 +420,7 @@
           if (result.isConfirmed) {
             $.ajax({
               type: 'POST',
-              url: "{{route('paslon.destroy')}}",
+              url: "{{route('tps.destroy')}}",
               data: {id: id, _token: '{{csrf_token()}}'},
               dataType: 'json',
               success: function(result) { 

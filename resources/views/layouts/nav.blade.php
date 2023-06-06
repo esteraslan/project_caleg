@@ -9,7 +9,7 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link" style="color: #333; margin-right: -20px">Selamat datang di <b>Sistem Informasi Pendukung Pemilu</b> | {{auth()->user()->name}}</a>
+        <a href="#" class="nav-link" style="color: #333; margin-right: -20px"><b>Sistem Informasi Pendukung Pemilu</b> | Selamat datang, {{auth()->user()->name}}</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">

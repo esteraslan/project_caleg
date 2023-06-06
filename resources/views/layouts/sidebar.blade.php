@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-light-gray elevation-2">
+<aside class="main-sidebar sidebar-dark-white elevation-2">
     <a href="index3.html" class="brand-link border-0">
         <img src="dist/img/bar-chart.png" alt="AdminLTE Logo" class="brand-image">
         <span class="brand-text font-weight-dark"><b>SiP</b>2</span>
@@ -90,7 +90,7 @@
                   <a href="{{ route('paslon.index') }}" class="nav-link {{ Request::is('paslon') ? 'active' : '' }}">
                       <i class="nav-icon fas fa-address-card"></i>
                       <p>
-                          Data Paslon
+                          Data Calon Legislatif
                       </p>
                   </a>
               </li>
