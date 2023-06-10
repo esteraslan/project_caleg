@@ -21,15 +21,12 @@ class PendukungController extends Controller
     public function list()
     {
         $pendukungs = Pendukung::select('pendukungs.*', 'relawans.name as relawan_name')
-        ->leftJoin('relawans', 'pendukungs.id_relawan', '=', 'relawans.id')
-        ->get();
-        
-    return response()->json([
-        'data' => $pendukungs
-    ]);  
-        $query = Pendukung::all();
-        return Datatables::of($query)->make();
+            ->leftJoin('relawans', 'pendukungs.id_relawan', '=', 'relawans.id')
+            ->get();
+            
+        return Datatables::of($pendukungs)->make(true);
     }
+    
 
     public function getrelawan(Request $request)
     {
