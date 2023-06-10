@@ -7,6 +7,7 @@ use App\Models\Relawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use DataTables;
+use DB;
 
 class PendukungController extends Controller
 {
@@ -19,19 +20,29 @@ class PendukungController extends Controller
 
     public function list()
     {
+        $pendukungs = Pendukung::select('pendukungs.*', 'relawans.name as relawan_name')
+        ->leftJoin('relawans', 'pendukungs.id_relawan', '=', 'relawans.id')
+        ->get();
+        
+    return response()->json([
+        'data' => $pendukungs
+    ]);  
         $query = Pendukung::all();
         return Datatables::of($query)->make();
     }
 
     public function getrelawan(Request $request)
     {
-      
-        $relawan = Relawan::select('id', 'name')->get();
-        return view('pendukung.getrelawan', compact('relawan'));
+        $relawans = DB::table('relawans')->select('id', 'name')->get(); // Mengambil data relawan dari tabel relawan
+        return response()->json([
+            'data' => $relawans
+        ]);
     }
+    
 
     public function store(Request $request)
     {
+
         $image = $request->file('gambar');
         $filetype       = $image->extension();
         $filename       = 'pendukung'.time();

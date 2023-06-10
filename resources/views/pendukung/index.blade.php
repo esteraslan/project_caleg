@@ -72,10 +72,11 @@
             </div>
 
             <label class="col-sm-3 col-form-label">Nama Relawan :</label>
-            <div class="col-sm-9 mb-2">
+                <div class="col-sm-9 mb-2">
                 <select style="width: 100%;" id="id_relawan" class="form-control form-control-sm select2" required>
                 </select>
             </div>
+
 
             <label class="col-sm-3 col-form-label">NIK / NO KTP :</label>
             <div class="col-sm-4">
@@ -149,6 +150,7 @@
       });
 
       function list(){
+        
         var table = $('#example1').DataTable({
                 processing: true,
                 serverSide: true,
@@ -182,9 +184,16 @@
                         name: 'name'
                     },
                     {
-                        data: 'id_relawan',
-                        name: 'id_relawan',
-                    },
+    data: 'relawan_name',
+    name: 'relawan_name',
+    render: function(data, type, row) {
+        if (data) {
+            return data;
+        }
+        return row.id_relawan;
+    }
+},
+
                     {
                         data: 'no_ktp',
                         name: 'no_ktp'
@@ -236,23 +245,6 @@
                 }
         });
       }
-      
-      function getrelawan(){
-        var html = '';
-          $.ajax({
-            url: "{{route('pendukung.getrelawan')}}",
-            type: "GET",
-            success: function (result) {
-              html += '<option value="" selected>-- Select --</option>';
-              $.each(result.data, function (key, value) {
-                  html += '<option value="'+value.id_relawan+'"> '+value.name+' </option>';
-              });
-              document.getElementById("id_relawan").innerHTML = html;
-            }
-          });
-      }
-
-
       function upload(){
           gambar.onchange = evt => {
               const [file] = gambar.files
@@ -269,6 +261,27 @@
           $(".Update").hide();
           $("#title2").hide();
       });
+
+      function getrelawan() {
+    var html = '';
+    $.ajax({
+        url: "{{ route('pendukung.getrelawan') }}",
+        type: "GET",
+        success: function (result) {
+            html += '<option value="" selected>-- Select --</option>';
+            $.each(result.data, function (key, value) {
+                html += '<option value="' + value.id + '"> ' + value.name + ' </option>';
+            });
+            $('#id_relawan').html(html);
+        }
+    });
+}
+
+// Panggil fungsi getrelawan saat halaman dimuat
+$(document).ready(function () {
+    getrelawan();
+});
+
 
       $(document).on("click", ".close", function () {
         clear();
