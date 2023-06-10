@@ -13,6 +13,7 @@ class RelawanController extends Controller
 {
     public function index()
     {
+
         $title = 'Relawan';
         return view('relawan.index', compact('title'));
     }
@@ -25,7 +26,7 @@ class RelawanController extends Controller
 
     public function store(Request $request)
     {
-        $relawan                = new Relawan;
+        $relawan                = new Relawan();
         $relawan->name          = $request->nama;
         $relawan->nik           = $request->nik;
         $relawan->jenis_kelamin = $request->jenis_kelamin;

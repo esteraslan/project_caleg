@@ -23,6 +23,7 @@
               <h3 class="card-title">List Data Legislatif</h3>
               <div class="card-tools">
                 <button class="btn btn-primary btn-sm" id="btn_add"><i class="fa fa-plus"></i> Add</button>
+                <button class="btn btn-primary btn-sm" id="btn_export"><i class="fa fa-plus"></i>Export</button>
               </div>
             </div>
             <div class="card-body">
@@ -30,12 +31,14 @@
                 <thead>
                     <tr>
                       <th width="50">#</th>
-                      <th>Relawan</th>
-                      <th>Nama Pemilih</th>
+                      <th>Photo KTP</th>
+                      <th>Nama Pendukung</th>
+                      <th>Nama Relawan</th>
                       <th>NIK / NO KTP</th>
                       <th>NO KK</th>
                       <th>Alamat</th>
                       <th>Keterangan</th>
+                      <th>Jenis Kelamin</th>
                       <th width="70">Action</th>
                     </tr>
                 </thead>
@@ -64,16 +67,13 @@
             <div class="col-12" id="alert"></div>
             <label class="col-sm-3 col-form-label">Nama Pendukung :</label>
             <div class="col-sm-9">
-                <input type="hidden" id="id" class="form-control" required>
+                <input type="hidden" id="iddata" class="form-control" required>
                 <input type="text" id="nama" class="form-control form-control-sm" required>
             </div>
 
             <label class="col-sm-3 col-form-label">Nama Relawan :</label>
             <div class="col-sm-9 mb-2">
-                <select style="width: 100%;" id="sts" class="form-control form-control-sm select2" required>
-                    <option value="" selected>- pilih -</option>
-                    <option value="1">Calon Utama</option>
-                    <option value="2">Calon Lawan</option>
+                <select style="width: 100%;" id="id_relawan" class="form-control form-control-sm select2" required>
                 </select>
             </div>
 
@@ -102,13 +102,12 @@
             <div class="form-group row">
               <label class="col-sm-4 col-form-label">Jenis Kelamin :</label>
               <div class="col-sm-8 mb-2">
-                  <select style="width: 100%;" id="sts" class="form-control form-control-sm select2" required>
+                  <select style="width: 100%;" id="jenis_kelamin" class="form-control form-control-sm select2" required>
                       <option value="" selected>- pilih -</option>
                       <option value="1">Laki-laki</option>
                       <option value="2">Perempuan</option>
                   </select>
               </div>
-      
               <label class="col-sm-4 col-form-label">Upload Foto KTP :</label>
               <div class="col-sm-8">
                   <input type="file" id="gambar" class="form-control" required>
@@ -160,7 +159,7 @@
                 destroy: true,
                 pageLength: 10,
                 ajax: {
-                    url: "{{ route('paslon.list') }}"
+                    url: "{{ route('pendukung.list') }}"
                 },
                 columns: [{
                         data: null,
@@ -175,7 +174,7 @@
                         data: 'gambar',
                         name: 'gambar',
                         render: function(data) {
-                          return '<img src="dist/img/paslon/'+data+'" width="50" height="60" class="img-thumbnail"/>';
+                          return '<img src="dist/img/pendukung/'+data+'" width="50" height="60" class="img-thumbnail"/>';
                         }
                     },
                     {
@@ -183,17 +182,33 @@
                         name: 'name'
                     },
                     {
-                        data: 'partai',
-                        name: 'partai'
+                        data: 'id_relawan',
+                        name: 'id_relawan',
                     },
                     {
-                        data: 'sts',
-                        name: 'sts',
+                        data: 'no_ktp',
+                        name: 'no_ktp'
+                    },
+                    {
+                        data: 'no_kk',
+                        name: 'no_kk'
+                    },
+                    {
+                        data: 'alamat',
+                        name: 'alamat'
+                    },
+                    {
+                        data: 'keterangan',
+                        name: 'keterangan'
+                    },
+                    {
+                        data: 'jenis_kelamin',
+                        name: 'jenis_kelamin',
                         render: function(data) {
                           if(data == 1){
-                            return 'Calon Utama';
+                            return 'Laki - Laki';
                           }else{
-                            return 'Calon Lawan';
+                            return 'Perempuan';
                           }
                         }
                     },
@@ -221,7 +236,23 @@
                 }
         });
       }
-   
+      
+      function getrelawan(){
+        var html = '';
+          $.ajax({
+            url: "{{route('pendukung.getrelawan')}}",
+            type: "GET",
+            success: function (result) {
+              html += '<option value="" selected>-- Select --</option>';
+              $.each(result.data, function (key, value) {
+                  html += '<option value="'+value.id_relawan+'"> '+value.name+' </option>';
+              });
+              document.getElementById("id_relawan").innerHTML = html;
+            }
+          });
+      }
+
+
       function upload(){
           gambar.onchange = evt => {
               const [file] = gambar.files
@@ -244,11 +275,15 @@
       });
 
       function clear(){
-          $("#id").val('');
+          $('#id').val('');
+          $("#id_pendukung").val('');
           $("#nama").val('');
-          $("#partai").val('');
-          $("#no_urut").val('');
-          $("#sts").val('').trigger('change');
+          $("#no_ktp").val('');
+          $("#no_kk").val('');
+          $('#alamat').val('');
+          $('#keterangan').val('');
+          $('#jenis_kelamin').val('');
+          $("#id_relawan").val('').trigger('change');
           $("#gambar").val('');
           imageView.src = "{{ asset('dist/img/bg_upload.png'); }}";
       }
@@ -259,11 +294,14 @@
           var files = $('#gambar')[0].files;
           if(files.length > 0){
               var fd = new FormData();
-              // Append data 
+              // Append data
+              fd.append('id_relawan', id_relawan.value);
               fd.append('nama', nama.value);
-              fd.append('partai', partai.value);
-              fd.append('no_urut', no_urut.value);
-              fd.append('sts', sts.value);
+              fd.append('no_ktp', no_ktp.value);
+              fd.append('no_kk', no_kk.value);
+              fd.append('alamat', no_ktp.value);
+              fd.append('keterangan', no_kk.value);
+              fd.append('jenis_kelamin',jenis_kelamin.value);
               fd.append('gambar', files[0]);
               fd.append('_token', '{{csrf_token()}}');
               // Hide alert 
@@ -271,7 +309,7 @@
               // AJAX request 
               if(validasi()){
                 $.ajax({
-                    url: "{{route('paslon.store')}}",
+                    url: "{{route('pendukung.store')}}",
                     method: 'POST',
                     data: fd,
                     contentType: false,
@@ -311,7 +349,7 @@
           var id = $(this).data('id');
           $.ajax({
               type: 'GET',
-              url: "{{route('paslon.edit')}}",
+              url: "{{route('pendukung.edit')}}",
               data: {
                       id: id,
                       _token: '{{csrf_token()}}'
@@ -319,12 +357,15 @@
               success: function(result) { 
                   if(result.success){
                       $('#myModal2').modal({ backdrop: 'static', keyboard: false, show: true });
-                      $("#iddata").val(result.id);
+                      $("#iddata").val(result.id)
                       $("#nama").val(result.nama);
-                      $("#partai").val(result.partai);
-                      $("#no_urut").val(result.no_urut);
-                      $("#sts").val(result.sts).trigger('change');
-                      imageView.src = '{{asset('dist/img/paslon')}}/'+result.gambar;
+                      $("#no_ktp").val(result.no_ktp);
+                      $("#no_kk").val(result.no_kk);
+                      $("#alamat").val(result.alamat);
+                      $("#keterangan").val(result.keterangan);
+                      $("#jenis_kelamin").val(result.jenis_kelamin);
+                      $("#id_relawan").val(result.id_relawan).trigger('change');
+                      imageView.src = '{{asset('dist/img/pendukung')}}/'+result.gambar;
                   }else{
                       SweetAlert.fire({
                           icon: 'warning', title: 'Warning', text: result.msg, showConfirmButton: false, timer: 1500
@@ -334,59 +375,66 @@
               });
       });
 
-      $(document).on("click", ".Update", function () {
-          $('#myModalLoading').modal({ backdrop: 'static', keyboard: false, show: true });
-          $('#myModal2').modal('hide');
-          var files = $('#gambar')[0].files;
-          var fd = new FormData();
-          // Append data 
-          fd.append('id', iddata.value);
-          fd.append('nama', nama.value);
-          fd.append('partai', partai.value);
-          fd.append('no_urut', no_urut.value);
-          fd.append('sts', sts.value);
-          fd.append('gambar', files[0]);
-          fd.append('_token', '{{csrf_token()}}');
-          // Hide alert 
-          $('#responseMsg').hide();
-          // AJAX request 
-          if(validasi()){
-            $.ajax({
-                url: "{{route('paslon.update')}}",
-                method: 'POST',
-                data: fd,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                success: function(result){
-                    if(result.success){
-                        list();
-                        clear();
-                        $("#myModalLoading").modal('hide');
-                        SweetAlert.fire({
-                            icon: 'success', title: 'Success', text: result.msg, showConfirmButton: false, timer: 1500
-                        });
-                    }else{
-                        clear();
-                        $("#myModalLoading").modal('hide');
-                        SweetAlert.fire({
-                            icon: 'error', title: 'Error', text: result.msg, showConfirmButton: false, timer: 50000
-                        });
-                    }
-                }
-            });
-          }
-      });
 
-      function validasi(){
-          if(nama.value != '' && partai.value != '' && no_urut.value != ''){
-              return true;
-          }else{
-              SweetAlert.fire({
-                  icon: 'error', title: 'Error', text: 'Kolom Nama, Partai & No Urut tidak boleh kosong.', showConfirmButton: false, timer: 1500
-              });
-          }
-      }
+
+$(document).on("click", ".Update", function () {
+  $('#myModalLoading').modal({ backdrop: 'static', keyboard: false, show: true });
+  $('#myModal2').modal('hide');
+  var files = $('#gambar')[0].files;
+  var fd = new FormData();
+  // Append data 
+  fd.append('id', iddata.value);
+  fd.append('id_relawan', id_relawan.value);
+  fd.append('nama', nama.value);
+  fd.append('no_ktp', no_ktp.value);
+  fd.append('no_kk', no_kk.value);
+  fd.append('alamat', no_ktp.value);
+  fd.append('keterangan', no_kk.value);
+  fd.append('jenis_kelamin',jenis_kelamin.value);
+  fd.append('gambar', files[0]);
+  fd.append('_token', '{{csrf_token()}}');
+  // Hide alert 
+  $('#responseMsg').hide();
+  
+  // AJAX request 
+  if(validasi()){
+    $.ajax({
+        url: "{{route('pendukung.update')}}",
+        method: 'POST', // Menggunakan metode POST
+        data: fd,
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        success: function(result){
+            if(result.success){
+                list();
+                clear();
+                $("#myModalLoading").modal('hide');
+                SweetAlert.fire({
+                    icon: 'success', title: 'Success', text: result.msg, showConfirmButton: false, timer: 1500
+                });
+            }else{
+                clear();
+                $("#myModalLoading").modal('hide');
+                SweetAlert.fire({
+                    icon: 'error', title: 'Error', text: result.msg, showConfirmButton: false, timer: 50000
+                });
+            }
+        }
+    });
+  }
+});
+
+function validasi(){
+  if(nama.value != '' && no_ktp.value != ''){
+      return true;
+  }else{
+      SweetAlert.fire({
+          icon: 'error', title: 'Error', text: 'Kolom Nama, Nik', showConfirmButton: false, timer: 1500
+      });
+  }
+}
+
 
       $(document).on("click", "#btn_delete", function () {
         var id = $(this).data('id');
@@ -402,7 +450,7 @@
           if (result.isConfirmed) {
             $.ajax({
               type: 'POST',
-              url: "{{route('paslon.destroy')}}",
+              url: "{{route('pendukung.destroy')}}",
               data: {id: id, _token: '{{csrf_token()}}'},
               dataType: 'json',
               success: function(result) { 

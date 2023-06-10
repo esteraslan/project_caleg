@@ -65,7 +65,14 @@ Route::group(['middleware' => ['auth']], function() {
     
     Route::group(['prefix' => 'pendukung'], function() {
         Route::get('/', 'PendukungController@index')->name('pendukung.index');
-    }); 
+        Route::get('/getrelawan', 'PendukungController@getrelawan')->name('pendukung.getrelawan');
+        Route::get('/list', 'PendukungController@list')->name('pendukung.list');
+        Route::post('/create', 'PendukungController@store')->name('pendukung.store');
+        Route::get('/edit', 'PendukungController@edit')->name('pendukung.edit');
+        Route::post('/update', 'PendukungController@update')->name('pendukung.update');
+        Route::post('/delete', 'PendukungController@destroy')->name('pendukung.destroy');
+    });   
+    
 
     Route::group(['prefix' => 'saksi'], function() {
         Route::get('/', 'SaksiController@index')->name('saksi.index');
